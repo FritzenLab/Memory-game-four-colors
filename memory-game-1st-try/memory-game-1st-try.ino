@@ -69,13 +69,14 @@ void turnLedsOn(bool defineSequence, int level, int leds[]) {
     defineSequence = false;
   }
 
-  if (millis() - ledTime > 200) {
-    if (anotherHalf == false) {
+  if (millis() - ledTime > 200) { // essentially every 200ms I will do something with the LEDs
+    if (anotherHalf == false) { // "anotherHalf" takes care of LED blinking (goes between true and false every 200ms)
       ledTime = millis();
       digitalWrite(leds[sequence[sequenceControl]], HIGH);
       Serial.println("LED ON");
       anotherHalf = true;
     } else {
+      ledTime= millis();
       digitalWrite(leds[sequence[sequenceControl]], LOW);
       sequenceControl++;
       if (sequenceControl >= level) {
@@ -90,11 +91,13 @@ void turnLedsOn(bool defineSequence, int level, int leds[]) {
 void readButtons(int buttons[], bool buttonsState[]) {
   static long delayTime = 0;
 
-  if (millis() - delayTime > 400) {
-    for (int j = 0; j < 4; j++) {  // ✅ Use `< 4` not `== 4`
-      if (digitalRead(buttons[j]) == HIGH) {
-        buttonsState[j] = true;
+  if (millis() - delayTime > 400) { // every 400ms reads all four buttons
+    for (int j = 0; j < 4; j++) {  
+      if (digitalRead(buttons[j]) == HIGH) { // if a given button is HIGH
+        buttonsState[j] = true;               // gives the buttonState of said button a "true"
         break;
+      }else{
+        buttonsState[j] = false; // if button reading returns LOW, gives its buttonState a "false"
       }
     }
     delayTime = millis();
