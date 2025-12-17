@@ -25,6 +25,7 @@ long showTime= 0;
 int interestLED= 0;
 int i= 0;
 int counterToBlink= 0;
+long buttonsTimer= 0;
 
 void setup() {
   Serial.begin(115200);
@@ -95,4 +96,22 @@ void showSequence(){
     firstPass++; // makes sure the LED goes ON then OFF
 
   }  
+}
+void readButtons(int state[4]) {
+  state[0] = digitalRead(redbutton);
+  state[1] = digitalRead(greenbutton);
+  state[2] = digitalRead(bluebutton);
+  state[3] = digitalRead(yellowbutton);
+
+  if(millis() - buttonsTimer > 300){
+    if(digitalRead(redbutton) == HIGH){
+      state[0]= 1;
+    }else if(digitalRead(greenbutton) == HIGH){
+      state[1]= 1;
+    }else if(digitalRead(bluebutton) == HIGH){
+      state[2]= 1;
+    }else if(digitalRead(yellowbutton) == HIGH){
+      state[3]= 1;
+    }
+  }
 }
